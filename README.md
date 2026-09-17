@@ -13,6 +13,7 @@ The repository contains the production workflow, brand references, and a scoped 
 | `references/brand-context.md` | Batuly, Byte Encoder, and Fabdale defaults |
 | `references/headless-runtime.md` | Rendering troubleshooting and patch provenance |
 | `scripts/network-interfaces-fallback.cjs` | Opt-in fallback for a specific Node OS error |
+| `scripts/edge-tts-system-ca.py` | Add trusted system CAs to Edge TTS without disabling TLS verification |
 
 ## Use the skill
 
@@ -76,6 +77,8 @@ npx remotion browser ensure
 
 Commit the generated lockfile. On subsequent setups, use `npm ci`. Keep all Remotion packages on compatible versions. Linux may also need browser shared libraries; follow Remotion's platform instructions for the actual OS and browser instead of applying an arbitrary dependency list.
 
+If `npx remotion browser ensure` fails with a proxy tunnel timeout, download a compatible Chrome Headless Shell archive with curl, extract it into a project-local directory, and use Remotion's `--browser-executable` option. In the tested VM, the Node downloader timed out but `curl` completed the same archive download. See [headless runtime notes](references/headless-runtime.md) for the tested error and command.
+
 A completed composition must exist before rendering. This skill guides the agent to create it; scaffolding alone does not create your promotional video.
 
 ### 2. Set up Hemkala narration
@@ -99,6 +102,15 @@ python -m pip freeze > requirements.txt
 ```
 
 For later installs, recreate the virtual environment and use `python -m pip install -r requirements.txt`.
+
+If `--list-voices` fails with `ClientConnectorCertificateError` even though the system trusts the service, Edge TTS 7.2.8 may be using its bundled certifi context. From this skill checkout, retry with the included helper and your project virtual environment:
+
+```bash
+.venv/bin/python /path/to/remotion-video/scripts/edge-tts-system-ca.py --list-voices
+.venv/bin/python /path/to/remotion-video/scripts/edge-tts-system-ca.py --voice ne-NP-HemkalaNeural --file narration.txt --write-media public/audio/narration.mp3
+```
+
+Use `SYSTEM_CA_BUNDLE=/path/to/trusted-ca-bundle.pem` if the platform bundle is elsewhere. This approach retains certificate verification and was verified in this VM; the helper uses private Edge TTS contexts and should be checked after upgrades.
 
 **Edge TTS requires internet access to Microsoft's online speech service.** Its client runs locally; speech synthesis is not offline. Rendering, editing, and audio mixing run on your machine. If access is blocked, supply an existing voiceover or resolve connectivity before finishing a narrated video.
 
@@ -149,7 +161,7 @@ This command assumes the npm-generated executable is a Node script or symlink, a
 
 The fallback preserves successful interface lookups, substitutes loopback metadata for supported failures, and rethrows unrelated errors. It does not restore internet access, change server binding, or disable TLS checks. Use supported loopback server configuration when available.
 
-**Provenance:** this is a reconstructed implementation of a previously used workaround. Its isolated branches were tested; it is not the recovered original patch, and compatibility must be checked with each target renderer. See [headless runtime notes](references/headless-runtime.md) for cache, certificate, font, GPU, and memory troubleshooting.
+**Provenance:** this is a reconstructed implementation of a previously used workaround. It also passed a real headless smoke render and a full 660-frame Remotion 4.0.525 video in this VM on 2026-09-17. It is not the recovered original patch; validate other versions with a smoke render. See [headless runtime notes](references/headless-runtime.md) for cache, certificate, font, GPU, and memory troubleshooting.
 
 ## Production checklist
 
