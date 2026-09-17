@@ -11,6 +11,7 @@ The repository contains the production workflow, brand references, and a scoped 
 | `SKILL.md` | Instructions for the agent, from brief through verified export |
 | `agents/openai.yaml` | Agent-facing skill metadata |
 | `references/brand-context.md` | Batuly, Byte Encoder, and Fabdale defaults |
+| `references/creative-brief.md` | Guided questions, script review, storyboard, and asset planning |
 | `references/headless-runtime.md` | Rendering troubleshooting and patch provenance |
 | `scripts/network-interfaces-fallback.cjs` | Opt-in fallback for a specific Node OS error |
 | `scripts/edge-tts-system-ca.py` | Add trusted system CAs to Edge TTS without disabling TLS verification |
@@ -29,6 +30,18 @@ Give your agent the absolute path to `SKILL.md`, for example:
 > Read /absolute/path/to/remotion-video/SKILL.md and use it to create a 30-second vertical Nepali promo for Batuly. Use Hemkala, the attached web screenshots, and the supplied script. Deliver the MP4, voiceover, and editable source.
 
 An agent that supports installing skill folders can install this repository using its own skill installer. Keep `SKILL.md`, `references`, `scripts`, `agents`, and `assets` together so relative paths continue to work.
+
+## Choose how to make a video
+
+**YOLO mode:** Delegate the creative decisions. The agent researches the product, chooses the concept, script, visuals, music, format, and timing from available context, then builds and verifies the video. It asks only when a required fact or exact asset is unavailable.
+
+> Use $remotion-video in YOLO mode. Make a 20-second vertical motion-graphics video for batuly.com with Nepali narration. Choose the concept and deliver the MP4 and editable project.
+
+**Guided mode:** Develop the video together. The agent first asks about the goal, audience, target platform and format, length, language, and visual direction. It proposes concepts and brainstorms the script with you. Next, it lays out each scene's timing, spoken line, on-screen copy, photos, footage, screenshots, animation, and audio cue. It asks for the specific missing assets, renders a preview, takes your feedback, and then exports the final versions.
+
+> Use $remotion-video in Guided mode. Help me plan a Fabdale product Reel: interview me, brainstorm the script first, then show where my product photos and clips will appear before rendering.
+
+Specify the platform (Instagram Reel, Facebook feed, YouTube landscape, website hero, etc.) and desired duration when you know them. The agent can recommend dimensions and verify current platform requirements when you do not. If you say “any video you like” or “surprise me,” the skill treats that as YOLO. Existing instructions and previously supplied assets carry into either mode.
 
 ## Runtime setup
 

@@ -1,8 +1,7 @@
 interface:
   display_name: Remotion Video
-  short_description: Create narrated videos with Remotion and Nepali Edge TTS
-  default_prompt: Use $remotion-video to create a polished video in the VM with Remotion,
-    Hemkala voiceover, and a verified MP4 export.
+  short_description: Create videos autonomously or through a guided brief
+  default_prompt: Use $remotion-video to create a video. Choose YOLO for full creative autonomy or Guided to develop the script and scene plan together.
   icon_small: assets/icon.svg
   icon_large: assets/icon.svg
 policy:
