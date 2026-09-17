@@ -1,0 +1,14 @@
+interface:
+  display_name: Remotion Video
+  short_description: Create narrated videos with Remotion and Nepali Edge TTS
+  default_prompt: Use $remotion-video to create a polished video in the VM with Remotion,
+    Hemkala voiceover, and a verified MP4 export.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
